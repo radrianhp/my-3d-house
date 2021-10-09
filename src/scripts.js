@@ -127,6 +127,7 @@ terrainRoughnessTexture.wrapS = THREE.RepeatWrapping;
 
 terrainColorTexture.wrapT = THREE.RepeatWrapping;
 terrainRoughnessTexture.wrapT = THREE.RepeatWrapping;
+
 /**
  * House
  */
@@ -457,6 +458,42 @@ floor.position.y = 0;
 floor.receiveShadow = true;
 
 scene.add(floor);
+
+/**
+ * Particles
+ */
+const particleTexture = textureLoader.load("/particles/particle.png");
+
+const particlesGeometry = new THREE.BufferGeometry();
+const count = 2000;
+
+const positions = new Float32Array(count * 3);
+const colors = new Float32Array(count * 3);
+
+for (let i = 0; i < count * 3; i++) {
+  positions[i] = (Math.random() - 0.5) * 20;
+  colors[i] = Math.random();
+}
+
+particlesGeometry.setAttribute(
+  "position",
+  new THREE.BufferAttribute(positions, 3)
+);
+
+particlesGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+const particlesMaterial = new THREE.PointsMaterial();
+particlesMaterial.size = 0.05;
+particlesMaterial.sizeAttenuation = true;
+// particlesMaterial.color = new THREE.Color("#ff88cc");
+
+particlesMaterial.alphaMap = particleTexture;
+particlesMaterial.transparent = true;
+particleTexture.depthWrite = false;
+particlesMaterial.vertexColors = true;
+//points
+const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+scene.add(particles);
 
 //sizes
 const sizes = {
